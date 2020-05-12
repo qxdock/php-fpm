@@ -36,9 +36,9 @@ RUN docker-php-ext-install pcntl && \
     docker-php-ext-configure intl && \
     docker-php-ext-install intl && \
     docker-php-ext-configure gd \
-        --enable-gd-native-ttf \
-        --with-jpeg-dir=/usr/lib \
-        --with-freetype-dir=/usr/include/freetype2 && \
+            --prefix=/usr \
+            --with-jpeg \
+            --with-freetype; \
     docker-php-ext-install gd
 
 RUN pecl install -o -f redis && \

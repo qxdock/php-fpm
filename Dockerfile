@@ -22,7 +22,8 @@ RUN apt-get install -y --no-install-recommends \
     g++ \
     libmagickwand-dev \
     imagemagick \
-    libgmp-dev
+    libgmp-dev \
+    zip unzip
 
 # Install base php extensions
 RUN docker-php-ext-install pcntl && \
@@ -43,10 +44,15 @@ RUN docker-php-ext-install pcntl && \
 
 RUN pecl install -o -f redis && \
     docker-php-ext-enable redis && \
-    pecl install imagick && \
-    docker-php-ext-enable imagick && \ 
     pecl install swoole && \
     docker-php-ext-enable swoole
+
+RUN curl -L https://github.com/Imagick/imagick/archive/master.zip -o /tmp/imagick.zip && \
+    unzip -q /tmp/imagick.zip -d /tmp && \
+    cd /tmp/imagick-master && \
+    phpize && ./configure && \
+    make && make install && \
+    docker-php-ext-enable imagick
 
 # Clean up
 RUN apt-get clean && \
